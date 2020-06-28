@@ -1,6 +1,7 @@
 import {module, test} from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { Server, Model, JSONAPISerializer} from 'miragejs';
+import { get } from '@ember/object';
 import EDModel, { attr } from '@ember-data/model';
 import {pushMirageIntoStore as pushMirageIntoStoreTestSupport} from "ember-cli-mirage/test-support";
 import {pushMirageIntoStore} from "ember-cli-mirage";
@@ -64,38 +65,38 @@ module('Unit | Utils | Push Mirage Into Store', function(hooks) {
 
     test('can push records all the records without a config', function(assert) {
       pushMirageIntoStoreTestSupport();
-      assert.equal(this.store.peekAll('user').length, 3);
-      assert.equal(this.store.peekAll('blog').length, 2);
+      assert.equal(get(this.store.peekAll('user'), 'length'), 3);
+      assert.equal(get(this.store.peekAll('blog'), 'length'), 2);
     });
 
     test('can push one resource as array', function(assert) {
       pushMirageIntoStoreTestSupport(['users']);
-      assert.equal(this.store.peekAll('user').length, 3);
-      assert.equal(this.store.peekAll('blog').length, 0);
+      assert.equal(get(this.store.peekAll('user'), 'length'), 3);
+      assert.equal(get(this.store.peekAll('blog'), 'length'), 0);
     });
 
     test('can push one resource as config true', function(assert) {
       pushMirageIntoStoreTestSupport({
         users: true
       });
-      assert.equal(this.store.peekAll('user').length, 3);
-      assert.equal(this.store.peekAll('blog').length, 0);
+      assert.equal(get(this.store.peekAll('user'), 'length'), 3);
+      assert.equal(get(this.store.peekAll('blog'), 'length'), 0);
     });
 
     test('can push one resource as config where hash', function(assert) {
       pushMirageIntoStoreTestSupport({
         users: { name: 'Joe Brown'}
       });
-      assert.equal(this.store.peekAll('user').length, 1);
-      assert.equal(this.store.peekAll('blog').length, 0);
+      assert.equal(get(this.store.peekAll('user'), 'length'), 1);
+      assert.equal(get(this.store.peekAll('blog'), 'length'), 0);
     });
 
     test('can push one resource as config where function', function(assert) {
       pushMirageIntoStoreTestSupport( {
         users: (item) => item.name.includes("Joe")
       });
-      assert.equal(this.store.peekAll('user').length, 2);
-      assert.equal(this.store.peekAll('blog').length, 0);
+      assert.equal(get(this.store.peekAll('user'), 'length'), 2);
+      assert.equal(get(this.store.peekAll('blog'), 'length'), 0);
     });
 
   });
@@ -117,38 +118,38 @@ module('Unit | Utils | Push Mirage Into Store', function(hooks) {
 
     test('can push records all the records without a config', function(assert) {
       pushMirageIntoStore(this.server, this.store);
-      assert.equal(this.store.peekAll('user').length, 3);
-      assert.equal(this.store.peekAll('blog').length, 2);
+      assert.equal(get(this.store.peekAll('user'), 'length'), 3);
+      assert.equal(get(this.store.peekAll('blog'), 'length'), 2);
     });
 
     test('can push one resource as array', function(assert) {
       pushMirageIntoStore(this.server, this.store, ['users']);
-      assert.equal(this.store.peekAll('user').length, 3);
-      assert.equal(this.store.peekAll('blog').length, 0);
+      assert.equal(get(this.store.peekAll('user'), 'length'), 3);
+      assert.equal(get(this.store.peekAll('blog'), 'length'), 0);
     });
 
     test('can push one resource as config true', function(assert) {
       pushMirageIntoStore(this.server, this.store, {
         users: true
       });
-      assert.equal(this.store.peekAll('user').length, 3);
-      assert.equal(this.store.peekAll('blog').length, 0);
+      assert.equal(get(this.store.peekAll('user'), 'length'), 3);
+      assert.equal(get(this.store.peekAll('blog'), 'length'), 0);
     });
 
     test('can push one resource as config where hash', function(assert) {
       pushMirageIntoStore(this.server, this.store, {
         users: { name: 'Joe Brown'}
       });
-      assert.equal(this.store.peekAll('user').length, 1);
-      assert.equal(this.store.peekAll('blog').length, 0);
+      assert.equal(get(this.store.peekAll('user'), 'length'), 1);
+      assert.equal(get(this.store.peekAll('blog'), 'length'), 0);
     });
 
     test('can push one resource as config where function', function(assert) {
       pushMirageIntoStore(this.server, this.store, {
         users: (item) => item.name.includes("Joe")
       });
-      assert.equal(this.store.peekAll('user').length, 2);
-      assert.equal(this.store.peekAll('blog').length, 0);
+      assert.equal(get(this.store.peekAll('user'), 'length'), 2);
+      assert.equal(get(this.store.peekAll('blog'), 'length'), 0);
     });
   });
 });
