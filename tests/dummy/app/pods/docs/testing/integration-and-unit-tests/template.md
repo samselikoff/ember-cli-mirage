@@ -175,7 +175,72 @@ module('Integration | Component | ArticleForm', function(hooks) {
 });
 ```
 
+### Helper to push Mirage's database
+
+A helper has been provided to push mirage's database into the ember data store following the same name and pattern that was published below under writing your own helper. You may now import this from `ember-cli-mirage/test-suport` 
+
+```js
+import { module } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import { click, fillIn } from '@ember/test-helpers';
+import { pushMirageIntoStore } from 'ember-cli-mirage/test-support';
+
+module('Integration | Component | ArticleForm', function(hooks) {
+  setupRenderingTest(hooks);
+  setupMirage(hooks);
+
+  test('it can edit an article', async function(assert) {
+    // ✅ Option 2: Use the store to find the record
+    let serverArticle = this.server.create('article', {
+      title: 'Old title'
+    });
+    pushMirageIntoStore();
+    let store = this.owner.lookup('service:store');
+    let article = store.peekRecord('article', serverArticle.id);
+    this.set('article', article);
+
+    await render(hbs`
+      <ArticleForm @article={{article}}>
+    `);
+
+    await fillIn('input', 'New title');
+    await click('.save');
+
+    // assert the model was saved
+  });
+});
+```
+
+If you do not wish to push all the resources, this helper has an optional parameter to define which resources to push.
+
+This parameter can be an array of all the resources in the form of `['users', 'blogs']`.
+
+For a finer control, this can also be a hash
+```js
+{
+  accounts: true,   // Push all records for this resource
+  accountTypes: { state: 'OH' }   // push the matching records using mirage's hash form of where
+  users: item => item.name.includes("Joe")   // push the matching records using mirage's function form of where 
+}
+``` 
+
+The pushMirageIntoStore is imported from `ember-cli-mirage/test-support` and is only usable within ember tests. If you wish to use the pushMirageIntoStore outside of tests, another version is also importable from `ember-cli-mirage`. This version has the following signature
+```js
+import { pushMirageIntoStore } from 'ember-cli-mirage';
+
+pushMirageIntoStore(
+  mirageServer,
+  emberDataStore,
+  config             // optional, same values as above
+);
+```
+
+This version can also be used inside your tests, but you will have to supply the two required parameters.
+
 ### Writing a helper to push Mirage's database
+
+(You no longer need to do this as one has been provided, this documentation is kept for historical purposes)
 
 The second approach is to make a helper that serializers Mirage's database into JSON and pushes that JSON into your Ember Data store.
 
