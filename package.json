@@ -80,7 +80,7 @@
     "ember-source": "~3.26.1",
     "ember-source-channel-url": "^3.0.0",
     "ember-try": "^1.0.0",
-    "escape-string-regexp": "^4.0.0",
+    "escape-string-regexp": "^5.0.0",
     "eslint-plugin-ember": "^8.1.0",
     "eslint-plugin-node": "^11.0.0",
     "faker": "^5.1.0",
