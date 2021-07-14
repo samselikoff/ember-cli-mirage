@@ -101,7 +101,7 @@ module('Integration | Component | ArticleForm', function(hooks) {
     let article = this.server.create('article', {
       title: 'Old title'
     });
-    this.set('article', article);
+    this.article = article;
 
     await render(hbs`
       <ArticleForm @article={{article}}>
@@ -129,7 +129,7 @@ So, in the same way that you wouldn't create a model in your server-side framewo
 // 🔴 Don't do this
 // `article` is a Mirage model. It should never be consumed directly by Ember code.
 let article = this.server.create('article');
-this.set('article', article);
+this.article = article;
 
 await render(hbs`
   <ArticleForm @article={{article}}>
@@ -161,7 +161,7 @@ module('Integration | Component | ArticleForm', function(hooks) {
     });
     let store = this.owner.lookup('service:store');
     let article = await store.findRecord('article', serverArticle.id);
-    this.set('article', article);
+    this.article = article;
 
     await render(hbs`
       <ArticleForm @article={{article}}>
@@ -232,7 +232,7 @@ module('Integration | Component | ArticleForm', function(hooks) {
     pushMirageIntoStore();
     let store = this.owner.lookup('service:store');
     let article = store.peekRecord('article', serverArticle.id);
-    this.set('article', article);
+    this.article = article;
 
     await render(hbs`
       <ArticleForm @article={{article}}>
