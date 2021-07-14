@@ -35,7 +35,7 @@
     "prepare": "./scripts/link.sh"
   },
   "dependencies": {
-    "@embroider/macros": "^0.40.0",
+    "@embroider/macros": "^0.43.0",
     "broccoli-file-creator": "^2.1.1",
     "broccoli-funnel": "^3.0.3",
     "broccoli-merge-trees": "^4.2.0",
