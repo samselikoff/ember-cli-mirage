@@ -45,6 +45,7 @@ Router.map(function() {
       this.route('mocking-guids');
       this.route('customizing-the-inflector');
       this.route('switching-between-scenarios');
+      this.route('supplying-helpers-from-addons');
     });
 
     this.route('api', function() {

@@ -28,10 +28,20 @@ module.exports = {
     }
 
     this.app = app;
-    this.addonConfig = this.app.project.config(app.env)['ember-cli-mirage'] || {};
+
+    // Make sure the mirage config exists, and set the `includedInBuild` key so
+    // addons that provide code that relies on mirage can decide whether to
+    // include their code or not based on whether or not mirage is included in
+    // the build.
+    let config = this.app.project.config(app.env);
+    config['ember-cli-mirage'] = config['ember-cli-mirage'] || {};
+    this.addonConfig = config['ember-cli-mirage'];
+    this.addonConfig.includedInBuild = this._shouldIncludeFiles();
+
     this.addonBuildConfig = this.app.options['ember-cli-mirage'] || {};
 
-    // Call super after initializing config so we can use _shouldIncludeFiles for the node assets
+    // Call super after initializing config so we can check the `includeInBuild`
+    // flag for the node assets
     this._super.included.apply(this, arguments);
 
     if (this.addonBuildConfig.directory) {
@@ -50,8 +60,7 @@ module.exports = {
   },
 
   treeFor(name) {
-    let shouldIncludeFiles = this._shouldIncludeFiles();
-    if (shouldIncludeFiles || name === 'vendor') {
+    if (this.addonConfig.includedInBuild || name === 'vendor') {
       return this._super.treeFor.apply(this, arguments);
     }
 
